@@ -94,4 +94,65 @@ mtcars_tbl%>%
         group_by(gear)%>%
         filter(mpg > 20, hp > 75)
 
-## continuar en pagina 159
+## USO DE SUMMARISE_ALL()
+
+## aca se podran funciones a todas las columnas y no es necesario agrupar
+## n_distinct() cuenta el número de distintos elementos de una variable.
+mtcars_tbl%>%
+        summarise_all(n_distinct)
+
+mtcars_tbl %>%
+        group_by(cyl) %>%
+        summarise_all(n_distinct)
+
+## USO DE SUMMARISE_AT()
+
+## agrupando por cilindros y sumarizando columnas especificas
+        
+mtcars_tbl %>%
+        group_by(cyl) %>%
+        summarise_at(c("mpg", "disp", "hp"), mean)
+
+## agrupasmos por cilindros
+## sumarisamos varias columnas
+## y calculamos 2 medidas estadisticas media y desviacion 
+
+mtcars_tbl %>%
+        group_by(cyl) %>%
+        summarise_at(c("mpg", "disp", "hp"),
+                     c("mean", "sd"))
+
+## lo mismo solo que de otra forma
+## indicando las fuciones sin comillas
+mtcars_tbl %>%
+        group_by(cyl) %>%
+        summarise_at(c("mpg", "disp", "hp"),
+                     funs(mean, sd))
+
+## lo mismo solo que poniendo nombres a los calculos con la inicial mayuscula
+## para los estadisticos 
+mtcars_tbl %>%
+        group_by(cyl) %>%
+        summarise_at(c("mpg", "disp", "hp"),
+                     c(Mean = "mean", SD = "sd"))
+
+mtcars_tbl %>%
+        group_by(cyl) %>%
+        summarise_at(c("mpg", "disp", "hp"),
+                     funs(Mean = mean, SD = sd))
+
+## USO DE SUMMARISE_IF()
+
+## agrupa por cilindros
+## sumariza sacando la media si son de tipo numerico
+## si no no calcula y no presenta la colmuna 
+mtcars_tbl %>%
+        group_by(cyl) %>%
+        summarise_if(is.numeric, mean)
+
+## no entiendo que hace aca
+mtcars_tbl %>%
+        group_by(cyl) %>%
+        summarise_if(function(x) is.numeric(x) & n_distinct(x) > 6, mean)
+
+## lo que restas de la pagina 161 ya no se practico
